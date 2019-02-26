@@ -1,0 +1,8 @@
+@import "style-headers.css";
+
+/* Dynamically generated ids. */
+.word-letter {
+    padding: 2px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-style: italic;
+}
