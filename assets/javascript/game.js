@@ -18,7 +18,7 @@ var wordLettersUnguessed = 0;
 function initializeGame() {
     computersWord = wordsToGuess[Math.floor(Math.random() * wordsToGuess.length)];
     // Console log deliberately left in for 'easy mode' (quickest win condition test)
-    console.log("Computer's word: " + computersWord);
+    console.log("[Deliberately left in code for testing] Computer's word: " + computersWord);
     wordLetterCountElement.textContent = computersWord.length;
     lettersGuessedElement.textContent = "";
 
@@ -49,29 +49,51 @@ function initializeGame() {
 
 initializeGame();
 
+var playingGame = true;
+
 
 document.onkeyup = function(event) {
     playerChoice = event.key.toLowerCase();
 
-    if (lettersGuessed.indexOf(playerChoice) >= 0) {
+    if (!playingGame) {
+        // Ignore the input.  Unless it's an 'n' for 'new game'.
+        if (playerChoice === 'n') {
+            playingGame = true;
+            initializeGame();
+        }
+    }
+    else if (lettersGuessed.indexOf(playerChoice) >= 0) {
         alert("You have already guessed " + playerChoice);
     }
     else if (computersWord.indexOf(playerChoice) >= 0) {
+        lettersGuessed += playerChoice;
+        lettersGuessedElement.textContent += playerChoice + ",";
+
         var idx = computersWord.indexOf(playerChoice);
         var letterId;
         var letterIdElement;
-        while (idx >= 0) {
-            wordLettersUnguessed--;
+        while (idx >= 0) {            
             letterId = "word-letter-" + idx;
             letterIdElement = document.getElementById(letterId);
             letterIdElement.textContent = playerChoice;
             idx = computersWord.indexOf(playerChoice,idx+1);
-        }        
+            wordLettersUnguessed--;
+        }
+        
+        // If there is only one guess left and they guessed correctly, leave the count at one.
+        //   This allows the player to enter in the rest of the letters if they can guess them exactly.
+        if (guessesLeft > 1) {
+            guessesLeft--;
+        }
     }
-
-    lettersGuessed += playerChoice;
-    guessesLeftElement.textContent = --guessesLeft;
-    lettersGuessedElement.textContent += playerChoice + ",";
+    else {
+        // Incorrect guess always decrements the counter.
+        guessesLeft--;
+        lettersGuessed += playerChoice;
+        lettersGuessedElement.textContent += playerChoice + ",";
+    }  
+   
+    guessesLeftElement.textContent = guessesLeft;
 
     if (wordLettersUnguessed <= 0) {
         alert("You guessed the word!");
@@ -80,6 +102,7 @@ document.onkeyup = function(event) {
             initializeGame();
         }
         else {
+            playingGame = false;  // Ignore input from now on.
             return;
         }
     }
@@ -90,6 +113,7 @@ document.onkeyup = function(event) {
             initializeGame();
         }
         else {
+            playingGame = false;  // Ignore input from now on.
             return;
         }
     }

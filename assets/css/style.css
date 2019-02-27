@@ -12,12 +12,14 @@
     padding: 5px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-style: italic;
+    background-color: lightgray;
 }
 
 body {
     background-image: url(images/purty_wood.png);
     font-family: gomarice-nandaka-western;
     font-size: 16pt;
+    padding: 4pt;
 }
 
 #letter-count {
