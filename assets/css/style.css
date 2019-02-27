@@ -1,8 +1,29 @@
 @import "style-headers.css";
 
+@font-face {
+    font-family:"gomarice-nandaka-western";
+    src: url("gomarice_nandaka_western.ttf") format("truetype");
+  }
+
+
+
 /* Dynamically generated ids. */
 .word-letter {
-    padding: 2px;
+    padding: 5px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-style: italic;
+}
+
+body {
+    background-image: url(images/purty_wood.png);
+    font-family: gomarice-nandaka-western;
+    font-size: 16pt;
+}
+
+#letter-count {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#guesses-left {
+    font-family: Arial, Helvetica, sans-serif;
 }

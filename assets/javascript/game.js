@@ -9,11 +9,12 @@ var wordsToGuess=["cat","dog","airplane","mouse","driveway","pneumonoultramicros
 var guessesLeft = 5;
 var wordLettersElement = document.getElementById("word-letters");
 var wordLetterCountElement = document.getElementById("letter-count");
+var lettersGuessed = [];
 var lettersGuessedElement = document.getElementById("guessed-letters");
 var guessesLeftElement = document.getElementById("guesses-left");
 var computersWord = "";
+var wordLettersUnguessed = 0;
 
-console.log("Defining function");
 function initializeGame() {
     computersWord = wordsToGuess[Math.floor(Math.random() * wordsToGuess.length)];
     // Console log deliberately left in for 'easy mode' (quickest win condition test)
@@ -24,6 +25,8 @@ function initializeGame() {
     // Right now this will be the number of characters in the word.  Can be computed differently.
     guessesLeft = computersWord.length;
     guessesLeftElement.textContent = guessesLeft;
+    wordLettersUnguessed = computersWord.length;
+    lettersGuessed = [];
 
     // Remove the elements - we can calculate their names.  
     var childCount = wordLettersElement.childElementCount;
@@ -44,5 +47,50 @@ function initializeGame() {
 
 }
 
-console.log("Calling initialize");
 initializeGame();
+
+
+document.onkeyup = function(event) {
+    playerChoice = event.key.toLowerCase();
+
+    if (lettersGuessed.indexOf(playerChoice) >= 0) {
+        alert("You have already guessed " + playerChoice);
+    }
+    else if (computersWord.indexOf(playerChoice) >= 0) {
+        var idx = computersWord.indexOf(playerChoice);
+        var letterId;
+        var letterIdElement;
+        while (idx >= 0) {
+            wordLettersUnguessed--;
+            letterId = "word-letter-" + idx;
+            letterIdElement = document.getElementById(letterId);
+            letterIdElement.textContent = playerChoice;
+            idx = computersWord.indexOf(playerChoice,idx+1);
+        }        
+    }
+
+    lettersGuessed += playerChoice;
+    guessesLeftElement.textContent = --guessesLeft;
+    lettersGuessedElement.textContent += playerChoice + ",";
+
+    if (wordLettersUnguessed <= 0) {
+        alert("You guessed the word!");
+        var ans = confirm("Do you want to play again?");
+        if (ans === true) {
+            initializeGame();
+        }
+        else {
+            return;
+        }
+    }
+    else if (guessesLeft <= 0) {
+        alert("You did not guess the word!");
+        var ans = confirm("Do you want to play again?");
+        if (ans === true) {
+            initializeGame();
+        }
+        else {
+            return;
+        }
+    }
+}
